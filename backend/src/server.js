@@ -20,6 +20,7 @@ const zoningRoutes = require('./routes/zoning');
 const fileRoutes = require('./routes/files');
 const validationRoutes = require('./routes/validation');
 const gisRoutes = require('./routes/gis');
+const aiRoutes = require('./routes/ai');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -92,6 +93,7 @@ app.use('/api/zoning', authMiddleware, zoningRoutes);
 app.use('/api/files', authMiddleware, fileRoutes);
 app.use('/api/validation', authMiddleware, validationRoutes);
 app.use('/api/gis', authMiddleware, gisRoutes);
+app.use('/api/ai', authMiddleware, aiRoutes);
 
 // Root endpoint
 app.get('/', (req, res) => {
