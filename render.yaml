@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: urban-planning-backend
+    env: node
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: node dist/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: DATABASE_URL
+        sync: false
+      - key: GOOGLE_MAPS_API_KEY
+        sync: false
