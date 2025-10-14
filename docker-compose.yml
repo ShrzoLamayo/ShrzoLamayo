@@ -1,0 +1,35 @@
+version: '3.9'
+services:
+  db:
+    image: postgis/postgis:16-3.4
+    container_name: urban_postgis
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: urban_planning
+    ports:
+      - '5433:5432'
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./scripts/sql:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+  api:
+    build: .
+    container_name: urban_backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgres://postgres:postgres@db:5432/urban_planning
+      - NODE_ENV=production
+      - PORT=8080
+      - GOOGLE_MAPS_API_KEY=${GOOGLE_MAPS_API_KEY}
+    ports:
+      - '8080:8080'
+    command: ["node", "dist/server.js"]
+volumes:
+  db_data:
